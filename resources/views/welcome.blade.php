@@ -1,21 +1,25 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layout.app')
 
-        <title>Laravel</title>
+@section('title', 'Главная страница')
 
-        <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+@section('content')
+    @include('partials.header')
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10 mb-20">
+        @foreach($posts as $post)
+            <div class="m-auto px-4 py-8 max-w-xl">
+                <div class="bg-white shadow-2xl" >
+                    <div>
+                        <img src="/storage/posts/{{ $post->thumbnail }}">
+                    </div>
+                    <div class="px-4 py-2 mt-2 bg-white">
+                        <h2 class="font-bold text-2xl text-gray-800">{{ $post->title }}</h2>
+                        <p class="sm:text-sm text-xs text-gray-700 px-2 mr-1 my-3">
+                            {!! $post->preview !!}
+                        </p>
+                    </div>
+                </div>
 
-        <!-- Styles -->
-        <link href="resources/css/app.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
-
-    </head>
-    <body>
-       <h1>ТЕСТ</h1>
-    <script src="resources/js/app.js"></script>
-    </body>
-</html>
+            </div>
+        @endforeach
+    </div>
+@endsection
