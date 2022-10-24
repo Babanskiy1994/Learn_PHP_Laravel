@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
 
+
 class AuthController extends Controller
 {
     public function showLoginForm()
@@ -15,7 +16,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $data = $request;
+        $data = $request->except(['_token']);
 
         if (auth("web")->attempt($data)){
             return redirect(route("home"));
@@ -37,7 +38,7 @@ class AuthController extends Controller
 
     public function register(RegistrationRequest $request)
     {
-        $data = $request;
+        $data = $request->all();
 
         $user = User::create([
             "name" => $data["name"],
