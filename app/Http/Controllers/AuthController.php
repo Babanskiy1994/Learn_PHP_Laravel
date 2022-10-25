@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Mail\ForgotPassword;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 
 class AuthController extends Controller
@@ -36,6 +39,11 @@ class AuthController extends Controller
         return view("auth.register");
     }
 
+    public function showForgotForm()
+    {
+        return view("auth.forgot");
+    }
+
     public function register(RegistrationRequest $request)
     {
         $data = $request->all();
@@ -51,5 +59,18 @@ class AuthController extends Controller
         }
 
         return redirect(route("home"));
+    }
+
+    public function forgot(ForgotRequest $request)
+    {
+        $data = $request->all();
+
+        $user = User::where(["email" => $data["email"]])->first();
+
+        $password = uniqid();
+        $user->password = bcrypt($password);
+        $user->save();
+        Mail::to($user)->send(new ForgotPassword($password));
+        return redirect(route("login"));
     }
 }
